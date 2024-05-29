@@ -1,15 +1,20 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" %> <%@page
-import="java.util.*" %> <%@page import="com.genis.app.rutas.models.*" %> <%
-//recuperamos la lista de camiones que seteamos en el request desde el servlet
-List<Camion>
-  camiones = (List<Camion
-    >) request.getAttribute("camiones"); %>
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
+<%@page import="java.util.*" %>
+<%@page import="com.genis.app.rutas.models.*" %>
+<%@page import="java.time.format.*"%>
+
+<%
+Chofer chofer = (Chofer) request.getAttribute("chofer");
+String fecha = chofer.getFechaNacimiento() != null ? chofer.getFechaNacimiento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "";
+Boolean estado = chofer.getDisponibilidad();
+String disponible = estado == true ? "Disponible" : "No disponible";
+%>
     <!DOCTYPE html>
     <html lang="en">
       <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Lista Camiones</title>
+        <title>Detalles Choferes</title>
         <link
           href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"
           rel="stylesheet"
@@ -209,132 +214,41 @@ List<Camion>
         </header>
         <section class="px-6 py-12">
           <div class="flex text-center p-20 justify-center">
-            <h2 class="text-2xl font-bold text-ceter">Listado De Camiones</h2>
+            <div class=" rounded-lg overflow-hidden shadow-lg">
+                <div class="px-6 py-4">
+                  <div class="font-bold text-3xl mb-2">Detalle De Chofer</div>
+                    <ul class="w-96 text-surface dark:text-white">
+                        <li class="w-full border-b-2 border-neutral-100 py-4 dark:border-white/10"><strong class="text-blue-500">Nombre: </strong><%=chofer.getNombre()%></li>
+                        <li class="w-full border-b-2 border-neutral-100 py-4 dark:border-white/10"><strong class="text-blue-500">Ap. Paterno: </strong><%=chofer.getApPaterno()%></li>
+                        <li class="w-full border-b-2 border-neutral-100 py-4 dark:border-white/10"><strong class="text-blue-500">Ap. Materno: </strong><%=chofer.getApMaterno()%></li>
+                        <li class="w-full border-b-2 border-neutral-100 py-4 dark:border-white/10"><strong class="text-blue-500">Licencia: </strong><%=chofer.getLicencia()%></li>
+                        <li class="w-full border-b-2 border-neutral-100 py-4 dark:border-white/10"><strong class="text-blue-500">Telefono: </strong><%=chofer.getTelefono()%></li>
+                        <li class="w-full border-b-2 border-neutral-100 py-4 dark:border-white/10"><strong class="text-blue-500">Fecha Nacimiento: </strong><%=fecha%></li>
+                        <li class="w-full border-b-2 border-neutral-100 py-4 dark:border-white/10"><strong class="text-blue-500">Disponiblidad: </strong><%=disponible%></li>
+                    </ul>
+                </div>
+                <div class="px-6 pt-4 pb-2">
+                    <button
+                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                  >
+                    <a href="<%=request.getContextPath()%>/choferes/listar" class="">
+                      Volver
+                    </a>
+                  </button>
+                </div>
+              </div>
           </div>
           <div>
-            <button
-            class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800"
-          >
-            <a
-              href="<%=request.getContextPath()%>/camiones/alta"
-              class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0"
+            <!-- <button
+              class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
             >
-              Alta Camion
-            </a>
-          </button>
-            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-              <table
-                class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
-              >
-                <thead
-                  class="text-xs text-gray-700 uppercase dark:text-gray-400"
-                >
-                  <tr class="text-center">
-                    <th
-                      scope="col"
-                      class="px-6 py-3 bg-gray-50 dark:bg-gray-800"
-                    >
-                      ID
-                    </th>
-                    <th scope="col" class="px-6 py-3">MATRICULA</th>
-                    <th
-                      scope="col"
-                      class="px-6 py-3 bg-gray-50 dark:bg-gray-800"
-                    >
-                      TIPO DE CAMION
-                    </th>
-                    <th
-                      scope="col"
-                      class="px-6 py-3 bg-gray-50 dark:bg-gray-800"
-                    >
-                      MODELO
-                    </th>
-                    <th
-                      scope="col"
-                      class="px-6 py-3 bg-gray-50 dark:bg-gray-800"
-                    >
-                      MARCA
-                    </th>
-                    <th
-                      scope="col"
-                      class="px-6 py-3 bg-gray-50 dark:bg-gray-800"
-                    >
-                      CAPACIDAD
-                    </th>
-                    <th
-                    scope="col"
-                    class="px-6 py-3 bg-gray-50 dark:bg-gray-800"
-                  >
-                    KILOMETRAJE
-                  </th>
-                  <th
-                  scope="col"
-                  class="px-6 py-3 bg-gray-50 dark:bg-gray-800"
-                >
-                  DETALLE DE CAMIONES
-                </th>
-                    <th scope="col" class="px-6 py-3">EDITAR CAMIONES</th>
-                    <th
-                      scope="col"
-                      class="px-6 py-3 bg-gray-50 dark:bg-gray-800"
-                    >
-                      ELIMINAR CAMIONES
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% for(Camion c : camiones) { %>
-                  <tr
-                    class="text-center border-b border-gray-200 dark:border-gray-700"
-                  >
-                    <td class="py-6 text-blue-500"><%=c.getId()%></td>
-                    <td class="py-6"><%=c.getMatricula()%></td>
-                    <td class="py-6"><%=c.getTipoCamion()%></td>
-                    <td class="py-6"><%=c.getModelo()%></td>
-                    <td class="py-6"><%=c.getMarca()%></td>
-                    <td class="py-6"><%=c.getCapacidad()%></td>
-                    <td class="py-6"><%=c.getKilometraje()%></td>
-                    <td class="py-6">
-                      <a
-                        href="<%=request.getContextPath()%>/camiones/detalle?id=<%=c.getId()%>"
-                        class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800"
-                      >
-                        <span
-                          class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0"
-                        >
-                          Detalle
-                        </span>
-                      </a>
-                    </td>
-                    <td class="py-6">
-                      <a
-                      href="<%=request.getContextPath()%>/camiones/editar?id=<%=c.getId()%>"
-                      class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-red-200 via-red-300 to-yellow-200 group-hover:from-red-200 hover:text-white group-hover:via-red-300 group-hover:to-yellow-200 dark:text-white dark:hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400"
-                    >
-                      <span
-                        class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0"
-                      >
-                        Editar
-                      </span>
-                    </a>
-                    </td>
-                    <td class="py-6">
-                      <a
-                        href="<%=request.getContextPath()%>/camiones/eliminar?id=<%=c.getId()%>"
-                        class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800"
-                      >
-                        <span
-                          class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0"
-                        >
-                          Eliminar
-                        </span>
-                      </a>
-                    </td>
-                  </tr>
-                  <% } %>
-                </tbody>
-              </table>
-            </div>
+              <a href="<%=request.getContextPath()%>/choferes/alta" class="">
+                Alta Chofer
+              </a>
+            </button> -->
+            <!-- <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+
+            </div> -->
           </div>
         </section>
       </body>

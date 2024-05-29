@@ -29,7 +29,11 @@ public class CamionesService implements IService<Camion> {
 
     @Override
     public Optional<Camion> getById(Long id) {
-        return Optional.empty();
+        try {
+            return Optional.ofNullable(camionesRepo.getById(id));
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage(), e.getCause());
+        }
     }
 
     @Override
@@ -43,6 +47,10 @@ public class CamionesService implements IService<Camion> {
 
     @Override
     public void eliminar(Long id) {
-
+        try {
+            camionesRepo.eliminar(id);
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage(), e.getCause());
+        }
     }
 }

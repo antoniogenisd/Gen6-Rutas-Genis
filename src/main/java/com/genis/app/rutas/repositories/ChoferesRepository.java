@@ -33,17 +33,28 @@ public class ChoferesRepository implements IRepository<Chofer> {
 
     @Override
     public Chofer getById(Long id) throws SQLException {
-        return null;
+        Chofer chofer = null;
+       try(PreparedStatement stmt = conn.prepareStatement("SELECT * FROM CHOFERES WHERE ID_CHOFER = ?")){
+           stmt.setLong(1, id);
+           try(ResultSet rs = stmt.executeQuery()){
+               if(rs.next()){
+                   chofer = this.getChofer(rs);
+               }
+           }
+       }
+       return chofer;
     }
 
     @Override
     public void guardar(Chofer chofer) throws SQLException {
         String sql = "";
         if (chofer.getId() != 0 && chofer.getId() > 0){
-            sql = "update choferes set nombre=?, ap_paterno=?"+" ap_materno=?, licencia=?, telefono=?"+" fecha_nacimiento=?, disponibilidad=?"+" where id_chofer=?";
+            sql = "update choferes set nombre=?, ap_paterno=?, ap_materno=?, licencia=?, telefono=?, fecha_nacimiento=?, disponibilidad=?  where id_chofer=?";
         }else{
-            sql = "insert into choferes (id_chofer, nombre,"+" ap_paterno, ap_materno, licencia, telefono,"+" fecha_nacimiento, disponibilidad) values (-1, ?, ?, ?, ?, ?, ?, ?)";
+
+            sql = "insert into choferes (id_chofer, nombre, ap_paterno, ap_materno, licencia, telefono, fecha_nacimiento, disponibilidad) values (-1, ?, ?, ?, ?, ?, ?, ?)";
         }
+        System.out.println(sql);
         try(PreparedStatement stmt = conn.prepareStatement(sql)){
             if(chofer.getId() != 0 && chofer.getId() > 0){
                 stmt.setString(1, chofer.getNombre());
@@ -69,7 +80,11 @@ public class ChoferesRepository implements IRepository<Chofer> {
 
     @Override
     public void eliminar(Long id) throws SQLException {
-
+        String sql = "DELETE FROM CHOFERES WHERE ID_CHOFER = ?";
+        try(PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setLong(1, id);
+            stmt.executeUpdate();
+        }
     }
 
     //MAPEAR O TRANSFORMAR UN RENGLON/FILA/REGITRO EN UN OBJETO DE TIPO CHOFER

@@ -30,7 +30,11 @@ public class ChoferesService implements IService<Chofer> {
 
     @Override
     public Optional<Chofer> getById(Long id) {
-        return Optional.empty();
+        try {
+            return Optional.ofNullable(choferesRepo.getById(id));
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage(), e.getCause());
+        }
     }
 
     @Override
@@ -44,6 +48,10 @@ public class ChoferesService implements IService<Chofer> {
 
     @Override
     public void eliminar(Long id) {
-
+        try {
+            choferesRepo.eliminar(id);
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage(), e.getCause());
+        }
     }
 }

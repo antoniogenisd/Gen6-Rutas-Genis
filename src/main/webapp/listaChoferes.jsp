@@ -1,6 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %> <%@page
 import="java.util.*" %> <%@page import="com.genis.app.rutas.models.*" %> <%
-//recuperamos la lista de choferes que seteamos en el request desde el servlet
+//recuperamos la lista de camiones que seteamos en el request desde el servlet
 List<Chofer>
   choferes = (List<Chofer
     >) request.getAttribute("choferes"); %>
@@ -22,7 +22,7 @@ List<Chofer>
             class="fixed w-full bg-white border-gray-200 z-10 shadow-md dark:bg-gray-900 dark:border-gray-700"
           >
             <div
-              class="max-w-screen-xl bg-white dark:bg-gray-900  flex flex-wrap items-center justify-between mx-auto p-4"
+              class="max-w-screen-xl bg-white dark:bg-gray-900 flex flex-wrap items-center justify-between mx-auto p-4"
             >
               <a
                 href="#top"
@@ -211,14 +211,17 @@ List<Chofer>
           <div class="flex text-center p-20 justify-center">
             <h2 class="text-2xl font-bold text-ceter">Listado De Choferes</h2>
           </div>
-          <div >
-             <button
-              class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-               >
-                 <a href="<%=request.getContextPath()%>/choferes/alta" class="">
-                   Alta Chofer
-                 </a>
-               </button>
+          <div>
+            <button
+              class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800"
+            >
+              <a
+                href="<%=request.getContextPath()%>/choferes/alta"
+                class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0"
+              >
+                Alta Chofer
+              </a>
+            </button>
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
               <table
                 class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
@@ -278,22 +281,37 @@ List<Chofer>
                     <td class="py-6">
                       <a
                         href="<%=request.getContextPath()%>/choferes/detalle?id=<%=c.getId()%>"
-                        class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-                        >Detalle</a
+                        class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800"
                       >
+                        <span
+                          class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0"
+                        >
+                          Detalle
+                        </span>
+                      </a>
                     </td>
                     <td class="py-6">
                       <a
                         href="<%=request.getContextPath()%>/choferes/editar?id=<%=c.getId()%>"
-                        class="p-6 text-blue-500 w-[10rem] text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                        >Editar
+                        class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-red-200 via-red-300 to-yellow-200 group-hover:from-red-200 group-hover:via-red-300 group-hover:to-yellow-200 dark:text-white dark:hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400"
+                      >
+                        <span
+                          class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0"
+                        >
+                          Editar
+                        </span>
                       </a>
                     </td>
                     <td class="py-6">
                       <a
                         href="<%=request.getContextPath()%>/choferes/eliminar?id=<%=c.getId()%>"
-                        class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-                        >Eliminar
+                        class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800"
+                      >
+                        <span
+                          class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0"
+                        >
+                          Eliminar
+                        </span>
                       </a>
                     </td>
                   </tr>

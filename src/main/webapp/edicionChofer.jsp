@@ -1,15 +1,22 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" %> <%@page
-import="java.util.*" %> <%@page import="com.genis.app.rutas.models.*" %> <%
-//recuperamos la lista de camiones que seteamos en el request desde el servlet
-List<Camion>
-  camiones = (List<Camion
-    >) request.getAttribute("camiones"); %>
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
+<%@page import="java.util.*" %>
+<%@page import="com.genis.app.rutas.models.*" %>
+<%@page import="java.time.format.*"%>
+
+
+<%
+    Map<String, String> errores = (Map<String,String>) request.getAttribute("errores");
+        Chofer chofer = (Chofer) request.getAttribute("chofer");
+        String fecha = chofer.getFechaNacimiento() != null ? chofer.getFechaNacimiento().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) : "";
+        Boolean estado = chofer.getDisponibilidad();
+        String disponible = estado == true ? "checked" : "";
+%>
     <!DOCTYPE html>
     <html lang="en">
       <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Lista Camiones</title>
+        <title>Edicion Choferes</title>
         <link
           href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"
           rel="stylesheet"
@@ -19,10 +26,10 @@ List<Camion>
       <body>
         <header class="pb-6">
           <nav
-            class="fixed w-full bg-white border-gray-200 z-10 shadow-md dark:bg-gray-900 dark:border-gray-700"
+            class="bg-white border-gray-200 dark:bg-gray-900 dark:border-gray-700"
           >
             <div
-              class="max-w-screen-xl bg-white dark:bg-gray-900 flex flex-wrap items-center justify-between mx-auto p-4"
+              class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4"
             >
               <a
                 href="#top"
@@ -123,15 +130,13 @@ List<Camion>
                           <a
                             href="<%=request.getContextPath()%>/camiones/listar"
                             class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                            >Lista Camiones</a
-                          >
+                            >Lista Camiones</a>
                         </li>
                         <li>
                           <a
                             href="<%=request.getContextPath()%>/camiones/alta"
                             class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                            >Alta Camiones</a
-                          >
+                            >Alta Camiones</a>
                         </li>
                       </ul>
                     </div>
@@ -207,135 +212,110 @@ List<Camion>
             </div>
           </nav>
         </header>
-        <section class="px-6 py-12">
+        <section class="px-6">
           <div class="flex text-center p-20 justify-center">
-            <h2 class="text-2xl font-bold text-ceter">Listado De Camiones</h2>
+            <h2 class="text-2xl font-bold text-ceter">Formulario Edicion De Choferes</h2>
           </div>
-          <div>
-            <button
-            class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800"
-          >
-            <a
-              href="<%=request.getContextPath()%>/camiones/alta"
-              class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0"
-            >
-              Alta Camion
-            </a>
-          </button>
-            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-              <table
-                class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
-              >
-                <thead
-                  class="text-xs text-gray-700 uppercase dark:text-gray-400"
-                >
-                  <tr class="text-center">
-                    <th
-                      scope="col"
-                      class="px-6 py-3 bg-gray-50 dark:bg-gray-800"
-                    >
-                      ID
-                    </th>
-                    <th scope="col" class="px-6 py-3">MATRICULA</th>
-                    <th
-                      scope="col"
-                      class="px-6 py-3 bg-gray-50 dark:bg-gray-800"
-                    >
-                      TIPO DE CAMION
-                    </th>
-                    <th
-                      scope="col"
-                      class="px-6 py-3 bg-gray-50 dark:bg-gray-800"
-                    >
-                      MODELO
-                    </th>
-                    <th
-                      scope="col"
-                      class="px-6 py-3 bg-gray-50 dark:bg-gray-800"
-                    >
-                      MARCA
-                    </th>
-                    <th
-                      scope="col"
-                      class="px-6 py-3 bg-gray-50 dark:bg-gray-800"
-                    >
-                      CAPACIDAD
-                    </th>
-                    <th
-                    scope="col"
-                    class="px-6 py-3 bg-gray-50 dark:bg-gray-800"
-                  >
-                    KILOMETRAJE
-                  </th>
-                  <th
-                  scope="col"
-                  class="px-6 py-3 bg-gray-50 dark:bg-gray-800"
-                >
-                  DETALLE DE CAMIONES
-                </th>
-                    <th scope="col" class="px-6 py-3">EDITAR CAMIONES</th>
-                    <th
-                      scope="col"
-                      class="px-6 py-3 bg-gray-50 dark:bg-gray-800"
-                    >
-                      ELIMINAR CAMIONES
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% for(Camion c : camiones) { %>
-                  <tr
-                    class="text-center border-b border-gray-200 dark:border-gray-700"
-                  >
-                    <td class="py-6 text-blue-500"><%=c.getId()%></td>
-                    <td class="py-6"><%=c.getMatricula()%></td>
-                    <td class="py-6"><%=c.getTipoCamion()%></td>
-                    <td class="py-6"><%=c.getModelo()%></td>
-                    <td class="py-6"><%=c.getMarca()%></td>
-                    <td class="py-6"><%=c.getCapacidad()%></td>
-                    <td class="py-6"><%=c.getKilometraje()%></td>
-                    <td class="py-6">
-                      <a
-                        href="<%=request.getContextPath()%>/camiones/detalle?id=<%=c.getId()%>"
-                        class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800"
-                      >
-                        <span
-                          class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0"
-                        >
-                          Detalle
-                        </span>
-                      </a>
-                    </td>
-                    <td class="py-6">
-                      <a
-                      href="<%=request.getContextPath()%>/camiones/editar?id=<%=c.getId()%>"
-                      class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-red-200 via-red-300 to-yellow-200 group-hover:from-red-200 hover:text-white group-hover:via-red-300 group-hover:to-yellow-200 dark:text-white dark:hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400"
-                    >
-                      <span
-                        class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0"
-                      >
-                        Editar
-                      </span>
-                    </a>
-                    </td>
-                    <td class="py-6">
-                      <a
-                        href="<%=request.getContextPath()%>/camiones/eliminar?id=<%=c.getId()%>"
-                        class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800"
-                      >
-                        <span
-                          class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0"
-                        >
-                          Eliminar
-                        </span>
-                      </a>
-                    </td>
-                  </tr>
+            <div class="relative overflow-x-auto sm:rounded-lg ">
+            <br>
+            <% if(errores != null && errores.size()>0){ %>
+              <ul class="alert alert-danger">
+                <% for(String error: errores.values()){ %>
+                  <li>
+                    <%=error%>
+                  </li>
                   <% } %>
-                </tbody>
-              </table>
+              </ul>
+              <% } %>
+              <div>
+                <form
+                action="<%=request.getContextPath()%>/choferes/editar"
+                method="post"
+                class="max-w-2xl mx-auto"
+                >
+                <input type="hidden" name="id" value="<%=chofer.getId()%>">
+
+                <div class="grid grid-cols-3 gap-6">
+                    <div class="mb-5">
+                        <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre</label>
+                        <input type="text" name="nombre" id="nombre" value="<%=chofer.getNombre() != null? chofer.getNombre() : "" %>" class="form-control bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <% if (errores != null && errores.containsKey("nombre")){
+                            out.println("<span class='text-red'>" + errores.get("nombre") + "</span>");
+                           }
+                           %>
+                    </div>
+                    <div class="mb-5">
+                        <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Apellido Paterno</label>
+                        <input type="text"
+                        class="form-control bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        name="apPaterno" id="apPaterno" value="<%=chofer.getApPaterno() != null? chofer.getApPaterno() : "" %>">
+                        <% if (errores != null && errores.containsKey("apPaterno")){
+                            out.println("<span class='text-red'>" + errores.get("apPaterno") + "</span>");
+                           }
+                           %>
+                    </div>
+                    <div class="mb-5">
+                        <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Apellido Materno</label>
+                        <input type="text"
+                        class="form-control bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        name="apMaterno" id="apMaterno" value="<%=chofer.getApMaterno() != null? chofer.getApMaterno() : "" %>">
+                        <% if (errores != null && errores.containsKey("apMaterno")){
+                            out.println("<span class='text-red'>" + errores.get("apMaterno") + "</span>");
+                           }
+                           %>
+                    </div>
+
+                  </div>
+
+                  <div class="grid grid-cols-2 gap-6">
+                    <div class="mb-5">
+                        <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Licencia</label>
+                        <input type="text"
+                        class="form-control bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        name="licencia" id="licencia" value="<%=chofer.getLicencia() != null? chofer.getLicencia() : "" %>">
+                        <% if (errores != null && errores.containsKey("licencia")){
+                            out.println("<span class='text-red'>" + errores.get("licencia") + "</span>");
+                           }
+                           %>
+                    </div>
+                    <div class="mb-5">
+                        <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Telefono</label>
+                        <input type="text"
+                        class="form-control bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        name="telefono" id="telefono" value="<%=chofer.getTelefono() != null? chofer.getTelefono() : "" %>">
+                        <% if (errores != null && errores.containsKey("telefono")){
+                            out.println("<span class='text-red'>" + errores.get("telefono") + "</span>");
+                           }
+                           %>
+                    </div>
+                    <div class="mb-5">
+                        <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha de Nacimiento</label>
+                        <input type="date" name="fechaNacimiento" id="fechaNacimiento" value="<%=fecha%>" class="form-control bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <% if (errores != null && errores.containsKey("fechaNacimiento")){
+                            out.println("<span class='text-red'>" + errores.get("fechaNacimiento") + "</span>");
+                           }
+                           %>
+                    </div>
+                  </div>
+
+
+                  <div class="flex items-start mb-5">
+                    <div class="flex items-center h-5">
+                      <input
+                      name="disponiblidad"
+                      class="form-check-input w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
+                      id="disponiblidad"
+                      type="checkbox"
+                      value="1"
+                      <%=disponible%>  />
+                    </div>
+                    <label for="disponible" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Disponible</label>
+                  </div>
+                  <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Guardar</button>
+                  </form>
+                </div>
+                </div>
             </div>
-          </div>
         </section>
       </body>
     </html>

@@ -1,6 +1,7 @@
 package com.genis.app.rutas.repositories;
 
 import com.genis.app.rutas.models.Camion;
+import com.genis.app.rutas.models.Chofer;
 import com.genis.app.rutas.models.enums.Marcas;
 import com.genis.app.rutas.models.enums.Tipos;
 import java.sql.*;
@@ -36,16 +37,25 @@ public class CamionesRepository implements IRepository<Camion> {
 
     @Override
     public Camion getById(Long id) throws SQLException {
-        return null;
+        Camion camion = null;
+        try(PreparedStatement stmt = conn.prepareStatement("SELECT * FROM CAMIONES WHERE ID_CAMION = ?")){
+            stmt.setLong(1, id);
+            try(ResultSet rs = stmt.executeQuery()){
+                if(rs.next()){
+                    camion = this.getCamion(rs);
+                }
+            }
+        }
+        return camion;
     }
 
     @Override
     public void guardar(Camion camion) throws SQLException {
         String sql = "";
         if (camion.getId() != 0 && camion.getId() > 0){
-            sql = "update camiones set matricula=?, tipo_camion=?"+" modelo=?, marca=?, capacidad=?"+" kilometraje  =?, disponibilidad=?"+" where id_camion=?";
+            sql = "update camiones set matricula=?, tipo_camion=?, modelo=?, marca=?, capacidad=?, kilometraje  =?, disponibilidad=? where id_camion=?";
         }else{
-            sql = "insert into camiones (id_camion, matricula,"+" tipo_camion, modelo, marca, capacidad,"+" KILOMETRAJE, disponibilidad) values (SEQUENCE2.NEXTVAL, ?, ?, ?, ?, ?, ?, ?)";
+            sql = "insert into camiones (id_camion, matricula,tipo_camion, modelo, marca, capacidad, KILOMETRAJE, disponibilidad) values (SEQUENCE2.NEXTVAL, ?, ?, ?, ?, ?, ?, ?)";
         }
         try(PreparedStatement stmt = conn.prepareStatement(sql)){
             if(camion.getId() != 0 && camion.getId() > 0){
@@ -72,7 +82,11 @@ public class CamionesRepository implements IRepository<Camion> {
 
     @Override
     public void eliminar(Long id) throws SQLException {
-
+        String sql = "DELETE FROM CAMIONES WHERE ID_CAMION = ?";
+        try(PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setLong(1, id);
+            stmt.executeUpdate();
+        }
     }
 
     private Camion getCamion(ResultSet rs) throws SQLException{
