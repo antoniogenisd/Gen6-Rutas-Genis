@@ -19,7 +19,7 @@ public class ChoferesRepository implements IRepository<Chofer> {
     @Override
     public List<Chofer> listar() throws SQLException {
         List<Chofer> choferes = new ArrayList<>();
-        try(Statement stmt = conn.createStatement();
+            try(Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT * FROM CHOFERES")){
             while(rs.next()){
                 Chofer a = this.getChofer(rs);
